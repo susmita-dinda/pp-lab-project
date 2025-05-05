@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: donationconnect
+    env: python
+    buildCommand: ./build.sh
+    startCommand: gunicorn main:app
+    envVars:
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: FLASK_ENV
+        value: production
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
