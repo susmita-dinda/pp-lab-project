@@ -1,0 +1,86 @@
+/* Custom styling for the donation platform */
+
+/* General Styles */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+}
+
+/* Card hover effects */
+.donation-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.donation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Role badges */
+.badge-donor {
+    background-color: var(--bs-primary);
+}
+
+.badge-receiver {
+    background-color: var(--bs-success);
+}
+
+/* Donation status styles */
+.status-pending {
+    color: var(--bs-warning);
+}
+
+.status-received {
+    color: var(--bs-success);
+}
+
+/* Landing page hero section */
+.hero-section {
+    padding: 5rem 0;
+    text-align: center;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+    padding: 1.5rem 0;
+}
+
+/* Image preview for upload */
+.image-preview {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    margin-top: 1rem;
+}
+
+/* Custom avatar placeholder */
+.avatar-placeholder {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--bs-secondary);
+    color: var(--bs-light);
+    font-size: 3rem;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 3rem 0;
+    }
+    
+    .avatar-placeholder {
+        width: 100px;
+        height: 100px;
+        font-size: 2rem;
+    }
+}
