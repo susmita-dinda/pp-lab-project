@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to Donation Platform{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <section class="hero-section my-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h1 class="display-4 fw-bold mb-4">Making Donations Simple</h1>
+                <p class="lead mb-4">
+                    Connect with people in need and make a difference by donating items you no longer use.
+                </p>
+                {% if not current_user.is_authenticated %}
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-start">
+                        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4 me-sm-3">Get Started</a>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg px-4">Login</a>
+                    </div>
+                {% else %}
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-start">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg px-4">Go to Dashboard</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6 d-none d-lg-block text-center mt-5 mt-lg-0">
+                <!-- Using Font Awesome for a donation illustration -->
+                <i class="fas fa-hands-helping text-primary" style="font-size: 15rem;"></i>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="py-5">
+        <h2 class="text-center mb-5">How It Works</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-user-plus text-primary" style="font-size: 3rem;"></i>
+                        </div>
+                        <h4 class="card-title">Register</h4>
+                        <p class="card-text">Sign up as a donor or receiver to get started on your donation journey.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-gift text-primary" style="font-size: 3rem;"></i>
+                        </div>
+                        <h4 class="card-title">Create Donations</h4>
+                        <p class="card-text">Donors can upload photos and descriptions of items they wish to donate.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="fas fa-handshake text-primary" style="font-size: 3rem;"></i>
+                        </div>
+                        <h4 class="card-title">Connect</h4>
+                        <p class="card-text">Receivers can view and mark donations as received once they get them.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="bg-dark text-light p-5 rounded my-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2>Ready to make a difference?</h2>
+                <p class="lead">Join our community today and start donating or receiving items.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('register') }}" class="btn btn-light btn-lg">Join Now</a>
+                {% else %}
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-light btn-lg">Go to Dashboard</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

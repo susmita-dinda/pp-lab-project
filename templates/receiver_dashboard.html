@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}Receiver Dashboard - Donation Platform{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="mb-3">Receiver Dashboard</h1>
+            <p class="lead">Welcome, {{ current_user.username }}! View and manage your received donations here.</p>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">Total Donations</h5>
+                            <h2 class="mb-0">{{ donations|length }}</h2>
+                        </div>
+                        <i class="fas fa-gift fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-warning text-dark h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">Pending Items</h5>
+                            <h2 class="mb-0">{{ donations|selectattr('status', 'equalto', 'pending')|list|length }}</h2>
+                        </div>
+                        <i class="fas fa-clock fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Donations -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Pending Donations</h5>
+        </div>
+        <div class="card-body">
+            {% if donations|selectattr('status', 'equalto', 'pending')|list %}
+                <div class="row g-4">
+                    {% for donation in donations|selectattr('status', 'equalto', 'pending')|list %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100 donation-card">
+                                {% if donation.image %}
+                                    {% if config['UPLOAD_FOLDER'].startswith('static/') %}
+                                        <img src="{{ url_for('static', filename='uploads/' + donation.image) }}"
+                                             class="card-img-top" alt="{{ donation.title }}"
+                                             style="height: 200px; object-fit: cover;">
+                                    {% else %}
+                                        <img src="{{ url_for('uploaded_file', filename=donation.image) }}"
+                                             class="card-img-top" alt="{{ donation.title }}"
+                                             style="height: 200px; object-fit: cover;">
+                                    {% endif %}
+                                {% else %}
+                                    <div class="bg-secondary d-flex align-items-center justify-content-center"
+                                         style="height: 200px;">
+                                        <i class="fas fa-gift fa-4x text-white"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h5 class="card-title mb-0">{{ donation.title }}</h5>
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    </div>
+                                    <p class="card-text small text-muted">{{ donation.description|truncate(100) }}</p>
+                                    <p class="card-text small">
+                                        <strong>From:</strong> {{ donation.donor.username }}<br>
+                                        <strong>Date:</strong> {{ donation.created_at.strftime('%Y-%m-%d') }}
+                                    </p>
+                                    <div class="d-grid gap-2">
+                                        <a href="{{ url_for('donation_detail', donation_id=donation.id) }}" class="btn btn-primary">
+                                            View Details
+                                        </a>
+                                        <form action="{{ url_for('update_donation_status', donation_id=donation.id) }}" method="post" class="status-update-form">
+                                            <input type="hidden" name="status" value="received">
+                                            <button type="submit" class="btn btn-success w-100">
+                                                <i class="fas fa-check-circle me-2"></i>Mark as Received
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-inbox-in fa-4x text-muted mb-3"></i>
+                    <h5>No pending donations</h5>
+                    <p>You don't have any pending donations to receive.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recently Received Donations -->
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Recently Received Donations</h5>
+            <a href="{{ url_for('donations_history') }}" class="btn btn-sm btn-outline-primary">View All</a>
+        </div>
+        <div class="card-body">
+            {% if donations|selectattr('status', 'equalto', 'received')|list %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Donor</th>
+                                <th>Received Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for donation in donations|selectattr('status', 'equalto', 'received')|list %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if donation.image %}
+                                                {% if config['UPLOAD_FOLDER'].startswith('static/') %}
+                                                    <img src="{{ url_for('static', filename='uploads/' + donation.image) }}"
+                                                         class="rounded me-3" alt="{{ donation.title }}"
+                                                         style="width: 50px; height: 50px; object-fit: cover;">
+                                                {% else %}
+                                                    <img src="{{ url_for('uploaded_file', filename=donation.image) }}"
+                                                         class="rounded me-3" alt="{{ donation.title }}"
+                                                         style="width: 50px; height: 50px; object-fit: cover;">
+                                                {% endif %}
+                                            {% else %}
+                                                <div class="bg-secondary rounded me-3 d-flex align-items-center justify-content-center"
+                                                     style="width: 50px; height: 50px;">
+                                                    <i class="fas fa-gift text-white"></i>
+                                                </div>
+                                            {% endif %}
+                                            <div>
+                                                <h6 class="mb-0">{{ donation.title }}</h6>
+                                                <small class="text-muted">{{ donation.description|truncate(50) }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ donation.donor.username }}</td>
+                                    <td>{{ donation.updated_at.strftime('%Y-%m-%d') }}</td>
+                                    <td>
+                                        <a href="{{ url_for('donation_detail', donation_id=donation.id) }}"
+                                           class="btn btn-sm btn-outline-primary">
+                                            View Details
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
+                    <h5>No received donations yet</h5>
+                    <p>You haven't received any donations yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

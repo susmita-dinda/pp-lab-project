@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Create Donation - Donation Platform{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm my-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Create New Donation</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.title.label(class="form-label") }}
+                            {% if form.title.errors %}
+                                {{ form.title(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.title.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.title(class="form-control") }}
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label") }}
+                            {% if form.description.errors %}
+                                {{ form.description(class="form-control is-invalid", rows=4) }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.description.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.description(class="form-control", rows=4) }}
+                            {% endif %}
+                            <div class="form-text">Provide a detailed description of the item you're donating.</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.image.label(class="form-label") }}
+                            <div class="input-group">
+                                {{ form.image(class="form-control", id="image") }}
+                                <label class="input-group-text" for="image">
+                                    <i class="fas fa-upload"></i>
+                                </label>
+                            </div>
+                            {% if form.image.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.image.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Upload a clear image of the item. Max size: 16MB. Allowed formats: JPG, JPEG, PNG, GIF.</div>
+                            
+                            <!-- Image Preview -->
+                            <img id="image-preview" class="img-fluid image-preview mt-3" style="display: none;" alt="Preview">
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.receiver.label(class="form-label") }}
+                            {% if form.receiver.errors %}
+                                {{ form.receiver(class="form-select is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.receiver.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.receiver(class="form-select") }}
+                            {% endif %}
+                            <div class="form-text">Select the person who will receive this donation.</div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                            <a href="{{ url_for('donor_dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
